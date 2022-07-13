@@ -57,7 +57,6 @@ jobs:
         run: |
           sam deploy \
             --stack-name ${STACK_NAME} \
-            --parameter-overrides CommitId=${COMMIT_ID} \
             --template-file template.yml \
             --no-fail-on-empty-changeset
       - uses: docker/build-push-action@v2
@@ -66,3 +65,8 @@ jobs:
           tags: ${{ env.ECR_REGISTRY }}/bs4:${{ github.sha }}
           platforms: linux/amd64,linux/arm64
           context: images/bs4
+      - name: outputs
+        run: |
+          aws cloudformation describe-stacks \
+            --stack-name ${STACK_NAME} \
+            --query Stacks[0].Outputs
