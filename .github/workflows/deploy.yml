@@ -37,6 +37,12 @@ jobs:
         run: |
           cd layers/feedparser
           ./build.sh
+      - uses: docker/build-push-action@v2
+        with:
+          push: false
+          tags: bs4:${{ github.sha }}
+          platforms: linux/amd64,linux/arm64
+          context: images/bs4
       - name: validate
         run: |
           sam validate -t sam.yml
