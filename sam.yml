@@ -1,0 +1,27 @@
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  BaseImageBs4:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: bs4
+      ImageTagMutability: Mutable
+
+  LayerFeedparser:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: layers/feedparser
+
+  ParameterEcrImage:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Name: /alexandria/ecr/sam/bs4
+      Value: !GetAtt BaseImageBs4.RepositoryUri
+
+  ParameterLayerArnFeedparser:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Name: /alexandria/layer/sam/feedparser
+      Value: !Ref LayerFeedparser

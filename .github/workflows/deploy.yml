@@ -1,0 +1,21 @@
+name: deploy
+on:
+  push:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  ROLE_ARN: arn:aws:iam::433457599640:role/prepare-RoleGitHubActions-1HG0FTA4OWKIM
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ env.ROLE_ARN }}
+          aws-region: us-east-1
+      - run: aws s3 ls
