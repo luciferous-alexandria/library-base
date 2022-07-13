@@ -1,5 +1,9 @@
 Transform: AWS::Serverless-2016-10-31
 
+Parameters:
+  CommitId:
+    Type: String
+
 Resources:
   BaseImageBs4:
     Type: AWS::ECR::Repository
@@ -25,3 +29,17 @@ Resources:
       Type: String
       Name: /alexandria/layer/sam/feedparser
       Value: !Ref LayerFeedparser
+
+  ParameterCommitIdBaseLibrary:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Name: /alexandria/commit-id/sam/library-base
+      Value: !Ref CommitId
+
+Outputs:
+  ParameterNameLayerArnFeedparser:
+    Value: !Ref ParameterLayerArnFeedparser
+
+  ParameterNameEcrImageUrl:
+    Value: !GetAtt ParameterEcrImage.RepositoryUri

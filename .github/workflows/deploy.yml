@@ -1,19 +1,27 @@
 name: deploy
 on:
   push:
+    branches:
+      - master
 
 permissions:
   id-token: write
   contents: read
 
 env:
+  COMMIT_ID: ${{ github.sha }}
   ROLE_ARN: arn:aws:iam::433457599640:role/prepare-RoleGitHubActions-1HG0FTA4OWKIM
+  ARTIFACT_BUCKET: prepare-bucketlambdaartifact-7s2k15mtzn1x
+  STACK_NAME: library-base
+  ECR_REGISTRY: 433457599640.dkr.ecr.us-east-1.amazonaws.com
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: aws-actions/setup-sam@v2
+      - uses: docker/setup-buildx-action@v1
       - uses: actions/setup-python@v2
         with:
           python-version: 3.9
@@ -21,7 +29,32 @@ jobs:
         with:
           role-to-assume: ${{ env.ROLE_ARN }}
           aws-region: us-east-1
+      - uses: docker/login-action@v1
+        with:
+          registry: ${{ env.ECR_REGISTRY }}
       - name: install feedparser
         run: |
           cd layers/feedparser
           ./build.sh
+      - name: validate
+        run: |
+          sam validate -t sam.yml
+      - name: package
+        run: |
+          sam package \
+            --s3-bucket ${ARTIFACT_BUCKET} \
+            --s3-prefix library-base \
+            --template-file sam.yml \
+            --output-template-file template.yml
+      - name: deploy
+        run: |
+          sam deploy \
+            --stack-name ${STACK_NAME} \
+            --parameter-overrides CommitId=${COMMIT_ID} \
+            --template-file template.yml \
+            --no-fail-on-empty-changeset
+      - uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ${{ env.ECR_REGISTRY }}/bs4:${{ github.sha }}
+          context: images/bs4
