@@ -42,4 +42,4 @@ Outputs:
     Value: !Ref ParameterLayerArnFeedparser
 
   ParameterNameEcrImageUrl:
-    Value: !GetAtt ParameterEcrImage.RepositoryUri
+    Value: !Ref ParameterEcrImage
