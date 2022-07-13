@@ -66,4 +66,4 @@ jobs:
           platforms: linux/amd64,linux/arm64
           context: images/bs4
       - name: outputs
-        run: describe.sh
+        run: ./describe.sh
