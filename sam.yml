@@ -9,7 +9,7 @@ Resources:
     Type: AWS::ECR::Repository
     Properties:
       RepositoryName: bs4
-      ImageTagMutability: Mutable
+      ImageTagMutability: MUTABLE
 
   LayerFeedparser:
     Type: AWS::Serverless::LayerVersion
