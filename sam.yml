@@ -24,4 +24,4 @@ Outputs:
     Value: !Ref ParameterLayerArnLambda
 
   UriEcrRepositoryBs4:
-    Value: !GetAtt BaseImageBs4.RepositoryUri
+    Value: !GetAtt ImageBase.RepositoryUri
