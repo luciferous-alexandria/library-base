@@ -17,7 +17,7 @@ Resources:
     Properties:
       Type: String
       Name: /alexandria/layer/sam/lambda
-      Value: !Ref LayerFeedparser
+      Value: !Ref LayerLambda
 
 Outputs:
   ParameterNameLayerArnLambda:
