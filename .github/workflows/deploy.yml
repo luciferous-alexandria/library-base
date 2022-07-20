@@ -35,7 +35,7 @@ jobs:
           registry: ${{ env.ECR_REGISTRY }}
       - name: install layer libraries
         run: |
-          cd layers/lambda
+          cd layers/base
           ./build.sh
       - uses: docker/build-push-action@v2
         with:

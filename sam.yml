@@ -7,21 +7,21 @@ Resources:
       RepositoryName: base
       ImageTagMutability: MUTABLE
 
-  LayerLambda:
+  LayerBase:
     Type: AWS::Serverless::LayerVersion
     Properties:
-      ContentUri: layers/lambda
+      ContentUri: layers/base
 
-  ParameterLayerArnLambda:
+  ParameterLayerArnBase:
     Type: AWS::SSM::Parameter
     Properties:
       Type: String
-      Name: /alexandria/layer/sam/lambda
-      Value: !Ref LayerLambda
+      Name: /alexandria/layer/sam/base
+      Value: !Ref LayerBase
 
 Outputs:
   ParameterNameLayerArnLambda:
-    Value: !Ref ParameterLayerArnLambda
+    Value: !Ref ParameterLayerArnBase
 
   UriEcrRepositoryBs4:
     Value: !GetAtt ImageBase.RepositoryUri
